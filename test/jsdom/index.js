@@ -1208,7 +1208,20 @@ document.write("<SCR"+"IPT TYPE=\'text/javascript\' SRC=\'...\'><\/SCR"+"IPT>");
     mouseOver.initMouseEvent('mouseover', true, false);
     a.dispatchEvent(mouseOver);
     test.equal(window.divMousedOver, true);
+    test.done();
+  },
 
+  css_classes_should_be_attached_to_dom : function(test) {
+    [jsdom.level(2, 'core'), jsdom.level(3, 'core')].forEach(function (dom) {
+      test.notEqual(dom.StyleSheet, undefined);
+      test.notEqual(dom.MediaList, undefined);
+      test.notEqual(dom.CSSStyleSheet, undefined);
+      test.notEqual(dom.CSSRule, undefined);
+      test.notEqual(dom.CSSStyleRule, undefined);
+      test.notEqual(dom.CSSMediaRule, undefined);
+      test.notEqual(dom.CSSImportRule, undefined);
+      test.notEqual(dom.CSSStyleDeclaration, undefined);
+    });
     test.done();
   }
 };
