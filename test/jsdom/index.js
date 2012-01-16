@@ -505,13 +505,15 @@ exports.tests = {
   },
 
   queryselector: function(test) {
-    var html = '<html><body><div id="main"><p>Foo</p><p>Bar</p></div></body></html>',
+    var html = '<html><body><div id="main"><p class="foo">Foo</p><p>Bar</p></div></body></html>',
         document = jsdom.jsdom(html, null, {features: {'QuerySelector': true}}),
         div = document.body.children.item(0);
     var element = document.querySelector("#main p");
     test.equal(element, div.children.item(0), 'p and first-p');
     var element2 = div.querySelector("p");
     test.equal(element2, div.children.item(0), 'p and first-p');
+    var element3 = document.querySelector("#main p:not(.foo)");
+    test.equal(element3, div.children.item(1), 'p and second-p');
     test.done();
   },
 
@@ -1041,8 +1043,8 @@ document.write("<SCR"+"IPT TYPE=\'text/javascript\' SRC=\'...\'><\/SCR"+"IPT>");
   // Test inline event handlers on a regular element.
   test_element_inline_event_handler : function (test) {
     var doc = jsdom.jsdom(
-      "<html>" + 
-        "<head></head>" + 
+      "<html>" +
+        "<head></head>" +
         "<body>" +
         "  <div onclick='window.divClicked = true;'" +
         "       onmouseover='window.divMousedOver = true;'>" +
@@ -1160,6 +1162,20 @@ document.write("<SCR"+"IPT TYPE=\'text/javascript\' SRC=\'...\'><\/SCR"+"IPT>");
     test.done();
   },
 
+  issue_58_parse_templatedtags: function(test) {
+    /* There is a unit of whitespace at the front of the script tag
+       content as a workaround for
+       https://github.com/tautologistics/node-htmlparser/issues/29
+    */
+    var content = ' <%= cid %>'
+    var script = '<script type="text/x-underscore-tmpl">' + content + '</script>'
+    var html = '<html><head>' + script + '</head><body><p>hello world!</p></body></html>'
+    var doc = jsdom.html(html)
+    doc.innerHTML = html;
+    test.equal(doc.head.childNodes[0].innerHTML, content);
+    test.done();
+  },
+
   issue_239_replace_causes_script_execution : function(test) {
     jsdom.env({
       html : '<script type="text/javascript">window.a = 1;/* remove me */ console.log("executed?")</script>',
@@ -1180,10 +1196,18 @@ document.write("<SCR"+"IPT TYPE=\'text/javascript\' SRC=\'...\'><\/SCR"+"IPT>");
     });
   },
 
+  issue_361_textarea_value_property: function (test) {
+     var doc = jsdom.html('<html><body><textarea id="mytextarea"></textarea></body></html>');
+
+     doc.getElementById('mytextarea').value = '<foo>';
+     test.equal(doc.getElementById('mytextarea').value, '<foo>');
+     test.done();
+  },
+
   on_events_should_be_called_in_bubbling_phase : function (test) {
     var doc = jsdom.jsdom(
-      "<html>" + 
-        "<head></head>" + 
+      "<html>" +
+        "<head></head>" +
         "<body>" +
         "  <div onclick='window.divClicked = true;'" +
         "       onmouseover='window.divMousedOver = true;'>" +
