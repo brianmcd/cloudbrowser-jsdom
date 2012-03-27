@@ -545,6 +545,21 @@ exports.tests = {
     test.done();
   },
 
+  turn_off_queryselector: function(test) {
+    var html = '<html><body></body></html>',
+        document = jsdom.jsdom(html, null, {features: {'QuerySelector': true}});
+    test.equal(typeof document.querySelector, 'function', 'document.querySelector function exists');
+    test.equal(typeof document.querySelectorAll, 'function', 'document.querySelectorAll function exists');
+    test.equal(typeof document.body.querySelector, 'function', 'document.body.querySelector function exists');
+    test.equal(typeof document.body.querySelectorAll, 'function', 'document.body.querySelectorAll function exists');
+    document = jsdom.jsdom(html, null);
+    test.equal(typeof document.querySelector, 'undefined', 'document.querySelector does not exist');
+    test.equal(typeof document.querySelectorAll, 'undefined', 'document.querySelectorAll does not exist');
+    test.equal(typeof document.body.querySelector, 'undefined', 'document.body.querySelector does not exist');
+    test.equal(typeof document.body.querySelectorAll, 'undefined', 'document.body.querySelectorAll does not exist');
+    test.done();
+  },
+
   url_resolution: function(test) {
     var html = '\
   <html>\
@@ -1108,6 +1123,22 @@ document.write("<SCR"+"IPT TYPE=\'text/javascript\' SRC=\'...\'><\/SCR"+"IPT>");
     test.done();
   },
 
+  get_element_by_id_multi_id : function(test) {
+    var doc = jsdom.jsdom(), div, span;
+    div = doc.createElement('div');
+    div.setAttribute('id', 'foo');
+    doc.body.appendChild(div);
+	span = doc.createElement('span');
+    span.setAttribute('id', 'foo');
+    doc.body.appendChild(span);
+
+	// now if we remove the second element, we should still find the first
+	doc.body.removeChild(span);
+    test.equal(doc.getElementById('foo'), div, 'Original div#foo must be found after removing invalid span#foo');
+
+    test.done();
+  },
+
   jsdom_levels: function(test) {
     var level1 = jsdom.level(1);
     var level2 = jsdom.level(2);
@@ -1131,7 +1162,7 @@ document.write("<SCR"+"IPT TYPE=\'text/javascript\' SRC=\'...\'><\/SCR"+"IPT>");
   issue_338_internal_nodelist_props : function(test) {
     var doc = jsdom.html();
     var props = Object.keys(doc.body.childNodes);
-    test.equal(props.length, 1, 'Internal properties must not be enumerable');
+    test.equal(props.length, 2, 'Internal properties must not be enumerable');
     test.done();
   },
 
@@ -1247,5 +1278,39 @@ document.write("<SCR"+"IPT TYPE=\'text/javascript\' SRC=\'...\'><\/SCR"+"IPT>");
       test.notEqual(dom.CSSStyleDeclaration, undefined);
     });
     test.done();
+  },
+
+  lookup_namednodemap_by_property : function (test) {
+    var doc = jsdom.jsdom();
+    var core = jsdom.level(3, 'core');
+    var map = new core.NamedNodeMap(doc);
+    test.equal(map.length, 0);
+    var attr1 = doc.createAttribute('attr1');
+    map.setNamedItem(attr1);
+    test.equal(map['attr1'], attr1);
+    test.equal(map.length, 1);
+    var attr2 = doc.createAttribute('attr2');
+    map.setNamedItem(attr2);
+    test.equal(map['attr2'], attr2);
+    test.equal(map.length, 2);
+    var rm1 = map.removeNamedItem('attr1');
+    test.equal(rm1, attr1);
+    test.equal(map.length, 1);
+    var rm2 = map.removeNamedItem('attr2');
+    test.equal(rm2, attr2);
+    test.equal(map.length, 0);
+    test.done();
+  },
+
+  issue_319_HIERARCHY_REQUEST_ERR : function(test){
+   jsdom.env({
+      html: '<!DOCTYPE html><html><head><title>Title</title></head><body>My body</body></html><div></div>',
+      done : function(errors,window){
+        // TODO: ensure errors is not null, and contains the error message
+        // test.ok(errors);
+        test.ok(window);
+        test.done();
+      }
+   });
   }
 };
