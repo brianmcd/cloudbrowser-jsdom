@@ -69,6 +69,16 @@ exports.tests = {
     });
   },
 
+  env_with_absolute_file_with_spaces: function(test) {
+    jsdom.env({
+      html: path.join(__dirname, 'files/folder space', 'space.html'),
+      done: function(errors, window) {
+        test.equal(errors, null, 'errors should be null');
+        test.done()
+      }
+    });
+  },
+
   env_with_html: function(test) {
     var html = "<html><body><p>hello world!</p></body></html>";
     jsdom.env({
@@ -858,6 +868,14 @@ exports.tests = {
     test.done();
   },
 
+  entities_in_script_should_be_left_alone: function (test) {
+    var html = '<!DOCTYPE html><html><head></head><body><script>alert("&quot;");</script></body></html>';
+    var document = jsdom.jsdom(html);
+    test.strictEqual(document.body.innerHTML, '<script>alert("&quot;");</script>');
+    test.strictEqual(document.body.firstChild.innerHTML, 'alert("&quot;");');
+    test.done();
+  },
+
   document_title_and_entities: function (test) {
     var html = '<html><head><title>&lt;b&gt;Hello&lt;/b&gt;</title></head><body></body></html>';
     var document = jsdom.jsdom(html);
@@ -1062,7 +1080,8 @@ document.write("<SCR"+"IPT TYPE=\'text/javascript\' SRC=\'...\'><\/SCR"+"IPT>");
         "<head></head>" +
         "<body>" +
         "  <div onclick='window.divClicked = true;'" +
-        "       onmouseover='window.divMousedOver = true;'>" +
+        "       onmouseover='window.divMousedOver = true;'" +
+        "       onmouseout='window.divCalledFrom = this.tagName;'>" +
         "    <a></a>" +
         "  </div>" +
         "</body>" +
@@ -1083,6 +1102,11 @@ document.write("<SCR"+"IPT TYPE=\'text/javascript\' SRC=\'...\'><\/SCR"+"IPT>");
     mouseOver.initMouseEvent('mouseover', false, false);
     div.dispatchEvent(mouseOver);
     test.equal(window.divMousedOver, true);
+
+    var mouseOut = doc.createEvent('MouseEvents');
+    mouseOut.initMouseEvent('mouseout', false, false);
+    div.dispatchEvent(mouseOut);
+    test.equal(window.divMousedCalledFrom, "DIV");
 
     test.done();
   },

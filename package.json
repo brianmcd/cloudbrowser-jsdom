@@ -1,6 +1,6 @@
 {
     "name": "jsdom",
-    "version": "0.2.13",
+    "version": "0.2.15",
     "description": "A javascript implementation of the W3C DOM",
     "keywords": [
       "dom",
@@ -127,6 +127,29 @@
       {
         "name" : "Avi Deitcher",
         "url" : "https://github.com/deitch"
+      },
+      {
+        "name": "Nao Iizuka",
+        "email": "iizuka@kyu-mu.net",
+        "url": "https://github.com/iizukanao"
+      },
+      {
+        "name" : "Peter Perenyi",
+        "web" : "https://github.com/sinegar"
+      },
+      {
+         "name" : "Tiago Rodrigues",
+         "email" : "tmcrodrigues@gmail.com",
+         "web" : "http://trodrigues.net"
+      },
+      {
+        "name" : "Samori Gorse",
+        "email" : "samorigorse@gmail.com",
+        "web" : "http://github.com/shinuza"
+      },
+      {
+        "name" : "John Roberts",
+        "email" : "jroberts@logitech.com"
       }
     ],
     "bugs": {

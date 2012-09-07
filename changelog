@@ -1,3 +1,18 @@
+0.2.15
+ * Fix: make sure that doctypes don't get set as the documentElement (Aria Stewart)
+ * Add: HTTP proxy support for jsdom.env (Eugene Ware)
+ * Add: .hostname and .pathname properties to Anchor elements to comply with WHATWG standard (Avi Deitcher)
+ * Fix: Only decode HTML entities in text when not inside a <script> or <style> tag. (Andreas Lind Petersen)
+ * Fix: HTMLSelectElement single selection implemented its type incorrectly as 'select' instead of 'select-one' (John Roberts)
+
+0.2.14
+ * Fix: when serializing single tags use ' />' instead of '/>' (kapouer)
+ * Fix: support for contextify simulation using vm.runInContext (trodrigues)
+ * Fix: allow jsdom.env's config.html to handle file paths which contain spaces (shinuza)
+ * Fix: Isolate QuerySelector from prototype (Nao Iizuka)
+ * Add: setting textContent to '' or clears children (Jason Davies)
+ * Fix: jsdom.env swallows exceptions that occur in the callback (Xavi)
+
 0.2.13
  * Fix: remove unused style property which was causing explosions in 0.2.12 and node 0.4.7
 
