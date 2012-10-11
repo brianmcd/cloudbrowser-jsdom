@@ -1,17 +1,24 @@
 {
     "name": "jsdom",
     "version": "0.2.15",
-    "description": "A javascript implementation of the W3C DOM",
+    "description": "A JavaScript implementation of the W3C DOM",
     "keywords": [
       "dom",
       "w3c",
       "javascript"
     ],
-    "maintainers": [{
-      "name": "Elijah Insua",
-      "email": "tmpvar@gmail.com",
-      "url": "http://tmpvar.com"
-    }],
+    "maintainers": [
+      {
+        "name": "Elijah Insua",
+        "email": "tmpvar@gmail.com",
+        "url": "http://tmpvar.com"
+      },
+      {
+        "name": "Domenic Denicola",
+        "email": "domenic@domenicdenicola.com",
+        "url": "http://domenicdenicola.com"
+      }
+    ],
     "contributors": [
       {
         "name":  "Vincent Greene",
@@ -54,7 +61,6 @@
       },
       {
         "name":  "Sam Ruby",
-        "email": "N/A",
         "url":   "http://intertwingly.net/blog/"
       },
       {
@@ -150,6 +156,11 @@
       {
         "name" : "John Roberts",
         "email" : "jroberts@logitech.com"
+      },
+      {
+        "name" : "Chad Walker",
+        "email" : "chad@chad-cat-lore-eddie.com",
+        "url" : "https://github.com/chad3814"
       }
     ],
     "bugs": {
@@ -174,7 +185,8 @@
     "dependencies": {
        "htmlparser" : "1.x",
        "request"    : "2.x",
-       "cssom"      : "0.2.x",
+       "cssom"      : ">=0.2.2",
+       "cssstyle"   : "0.2.x",
        "contextify" : "0.1.x"
     },
     "devDependencies" : {
@@ -185,6 +197,9 @@
     "engines" : { "node" : ">=0.1.9" },
     "directories": {
         "lib": "./lib/jsdom"
+    },
+    "scripts": {
+        "test": "node ./test/runner"
     },
     "main": "./lib/jsdom"
 }

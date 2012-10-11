@@ -1,6 +1,7 @@
 var path = require("path");
 var fs   = require("fs");
 var jsdom = require('../../lib/jsdom');
+var toFileUrl = require('../util').toFileUrl(__dirname);
 
 exports.tests = {
   build_window: function(test) {
@@ -482,7 +483,7 @@ exports.tests = {
     var html = '\
       <html>\
         <head>\
-          <script type="text/javascript" src="file://'+__dirname+'/files/hello.js"></script>\
+          <script type="text/javascript" src="' + toFileUrl('files/hello.js') + '"></script>\
         </head>\
         <body>\
           <span id="test">hello from html</span>\
@@ -1012,23 +1013,6 @@ exports.tests = {
     test.done();
   },
 
-  parser_failure_tag_in_text_content : function(test) {
-    var thrown = false;
-    try {
-      var doc = jsdom.jsdom('\
-<SCRIPT TYPE="text/javascript"> \
-document.write("<SCR"+"IPT TYPE=\'text/javascript\' SRC=\'...\'><\/SCR"+"IPT>");\
-</SCRIPT>');
-    } catch (e) {
-      thrown = true;
-    }
-
-    test.ok(doc.errors.length === 1);
-    test.ok(doc.errors[0].message === "invalid markup");
-    test.ok(thrown === false);
-    test.done();
-  },
-
   // Test inline event handlers set on the body.
   test_body_event_handler_inline : function (test) {
     var html = "\
@@ -1106,7 +1090,7 @@ document.write("<SCR"+"IPT TYPE=\'text/javascript\' SRC=\'...\'><\/SCR"+"IPT>");
     var mouseOut = doc.createEvent('MouseEvents');
     mouseOut.initMouseEvent('mouseout', false, false);
     div.dispatchEvent(mouseOut);
-    test.equal(window.divMousedCalledFrom, "DIV");
+    test.equal(window.divCalledFrom, "DIV");
 
     test.done();
   },
@@ -1336,5 +1320,14 @@ document.write("<SCR"+"IPT TYPE=\'text/javascript\' SRC=\'...\'><\/SCR"+"IPT>");
         test.done();
       }
    });
+  },
+
+  issue_371_outerhtml_noformat : function(test) {
+    var originalHTML = '<li><span>A</span><span>B</span></li>';
+    var dom = jsdom.jsdom(originalHTML);
+    var outerHTML = dom.outerHTML;
+
+    test.equal(originalHTML, outerHTML);
+    test.done();
   }
 };
