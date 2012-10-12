@@ -1,11 +1,11 @@
 {
     "name": "jsdom",
-    "version": "0.2.15",
+    "version": "0.2.16",
     "description": "A JavaScript implementation of the W3C DOM",
     "keywords": [
       "dom",
       "w3c",
-      "javascript"
+      "html"
     ],
     "maintainers": [
       {
@@ -194,7 +194,6 @@
       "console.log" : "*",
       "optimist"   : "*"
     },
-    "engines" : { "node" : ">=0.1.9" },
     "directories": {
         "lib": "./lib/jsdom"
     },

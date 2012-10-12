@@ -87,7 +87,7 @@ jsdom.env({
 ```
 
 ### How it works
-`jsdom.env` is built for ease of use, which is rare in the world of the DOM! Since the web has some absolutely horrible javascript on it, as of jsdom 0.2.0 `jsdom.env` will not process external resources (scripts, images, etc).  If you want to process the javascript use one of the methods below (`jsdom.jsdom` or `jsdom.jQueryify`)
+`jsdom.env` is built for ease of use, which is rare in the world of the DOM! Since the web has some absolutely horrible JavaScript on it, as of jsdom 0.2.0 `jsdom.env` will not process external resources (scripts, images, etc).  If you want to process the JavaScript use one of the methods below (`jsdom.jsdom` or `jsdom.jQueryify`)
 
 ```js
 jsdom.env(html, [scripts], [config], callback);
@@ -181,7 +181,7 @@ Default features are extremely important for jsdom as they lower the configurati
 `FetchExternalResources`
 
 - _Default_: `["script"]`
-- _Allowed_: `["script", "img", "css", "frame", "link"]` or `false`
+- _Allowed_: `["script", "img", "css", "frame", "iframe", "link"]` or `false`
 
 Enables/disables fetching files over the file system/HTTP.
 
@@ -209,6 +209,10 @@ Initially enabled to be up to spec. Disable this if you do not need mutation eve
 This feature is backed by [sizzle][] but currently causes problems with some libraries. Enable this if you want `document.querySelector` and friends, but be aware that many libraries feature detect for this, and it may cause you a bit of trouble.
 
 [sizzle]: http://sizzlejs.com/
+
+## Canvas
+
+jsdom includes support for using the [canvas](https://npmjs.org/package/canvas) package to extend any `<canvas>` elements with the canvas API. To make this work, you need to include canvas as a dependency in your project, as a peer of jsdom. If jsdom can find the canvas package, it will use it, but if it's not present, then `<canvas>` elements will behave like `<div>`s.
 
 # More Examples
 
@@ -258,6 +262,22 @@ jsdom.jQueryify(window, "http://code.jquery.com/jquery.js", function () {
 
   console.log(window.$(".testing").text());
 });
+```
+
+## Passing objects to scripts inside the page
+
+```js
+var jsdom = require("jsdom").jsdom;
+var window = jsdom().createWindow();
+
+window.__myObject = { foo: "bar" };
+
+var scriptEl = window.document.createElement("script");
+scriptEl.src = "anotherScript.js";
+window.document.body.appendChild(scriptEl);
+
+// anotherScript.js will have the ability to read `window.__myObject`, even
+// though it originated in Node!
 ```
 
 # Test Compliance:
