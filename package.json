@@ -1,6 +1,6 @@
 {
     "name": "jsdom",
-    "version": "0.2.16",
+    "version": "0.2.18",
     "description": "A JavaScript implementation of the W3C DOM",
     "keywords": [
       "dom",
@@ -185,8 +185,8 @@
     "dependencies": {
        "htmlparser" : "1.x",
        "request"    : "2.x",
-       "cssom"      : ">=0.2.2",
-       "cssstyle"   : "0.2.x",
+       "cssom"      : "0.2.x",
+       "cssstyle"   : ">=0.2.3",
        "contextify" : "0.1.x"
     },
     "devDependencies" : {
